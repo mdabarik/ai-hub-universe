@@ -1,4 +1,12 @@
+const hideLoader = () => {
+    const loadingContainer = document.getElementById('loading');
+    loadingContainer.classList.add('hidden');
+}
 
+const showLoader = () => {
+    const loadingContainer = document.getElementById('loading');
+    loadingContainer.classList.remove('hidden');
+}
 
 const showModalInfo = async (id) => {
     let url = `https://openapi.programming-hero.com/api/ai/tool/0${id}`;
@@ -105,9 +113,12 @@ const displayTools = (tools) => {
         containerElement.appendChild(divElement);
         }
     ); // end of forEach
+    hideLoader();
+    document.getElementById('tools-container').classList.remove('hidden');
 }
 
 const getData = async () => {
+    showLoader();
     const res = await fetch("https://openapi.programming-hero.com/api/ai/tools");
     const data = await res.json();
     const tools = data.data.tools;
@@ -115,13 +126,15 @@ const getData = async () => {
 }
 
 const showAllData = () => {
+    document.getElementById('tools-container').classList.add('hidden');
     getData().then(res => {
         displayTools(res);
-    })
+    });
 }
 
 
 const sortByDate = function() {
+    document.getElementById('tools-container').classList.add('hidden');
     getData().then(res => {
         res.sort((a, b) => {
             return new Date(a.published_in) - new Date(b.published_in);
